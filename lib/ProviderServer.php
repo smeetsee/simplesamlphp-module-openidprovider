@@ -9,6 +9,8 @@ use SimpleSAML\Logger;
 use SimpleSAML\Module;
 use SimpleSAML\Utils;
 
+// Modified by Xander Smeets on 09-03-2024
+
 /*
  * Disable strict error reporting, since the OpenID library
  * used is PHP4-compatible, and not PHP5 strict-standards compatible.
@@ -101,7 +103,7 @@ class ProviderServer
 
         $this->authSource = new Auth\Simple($config->getString('auth'));
         $this->usernameAttribute = $config->getString('username_attribute');
-        $this->authProc = ['authproc' => $config->getArray('authproc', [])];
+        $this->authProc = ['authproc' => $config->getOptionalArray('authproc', [])];
 
         try {
             $store = new \Auth_OpenID_FileStore($config->getString('filestore'));
