@@ -10,12 +10,14 @@ $globalConfig = \SimpleSAML\Configuration::getInstance();
 $server = \SimpleSAML\Module\openidprovider\ProviderServer::getInstance();
 $identity = $server->getIdentity();
 
+$httpUtils = new \SimpleSAML\Utils\HTTP
+
 if (!$userId && $identity) {
     /*
      * We are accessing the front-page, but are logged in.
      * Redirect to the correct page.
      */
-    \SimpleSAML\Utils\HTTP::redirectTrustedURL($identity);
+    $httpUtils->redirectTrustedURL($identity);
 }
 
 // Determine whether we are at the users own page
@@ -39,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    \SimpleSAML\Utils\HTTP::redirectTrustedURL($identity);
+    $httpUtils->redirectTrustedURL($identity);
 }
 
 if ($ownPage) {
@@ -57,7 +59,7 @@ $userBase = \SimpleSAML\Module::getModuleURL('openidProvider/user.php');
 
 $xrds = \SimpleSAML\Module::getModuleURL('openidProvider/xrds.php');
 if ($userId !== false) {
-    $xrds = \SimpleSAML\Utils\HTTP::addURLParameters($xrds, array('user' => $userId));
+    $xrds = $httpUtils->addURLParameters($xrds, array('user' => $userId));
 }
 
 header('X-XRDS-Location: ' . $xrds);

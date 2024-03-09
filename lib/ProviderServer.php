@@ -119,6 +119,8 @@ class ProviderServer
                 throw new Error\Exception('Failed to create directory: ' . $this->trustStoreDir);
             }
         }
+
+        $httpUtils = new Utils\HTTP();
     }
 
 
@@ -319,7 +321,7 @@ class ProviderServer
     {
         $stateId = Auth\State::saveState($state, 'openidProvider:resumeState');
         $stateURL = Module::getModuleURL('openidProvider/' . $page);
-        return Utils\HTTP::addURLParameters($stateURL, ['StateID' => $stateId]);
+        return $httpUtils->addURLParameters($stateURL, ['StateID' => $stateId]);
     }
 
 
@@ -411,7 +413,7 @@ class ProviderServer
             }
 
             $trustURL = $this->getStateURL('trust.php', $state);
-            Utils\HTTP::redirectTrustedURL($trustURL);
+            $httpUtils->redirectTrustedURL($trustURL);
         }
 
         if (!$trusted) {
