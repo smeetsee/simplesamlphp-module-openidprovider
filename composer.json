@@ -2,7 +2,7 @@
     "_license_comments": [
         "Modified by Xander Smeets on 09-03-2024"
     ],
-    "name": "smeetsee/simplesamlphp-module-openidprovider",
+    "name": "simplesamlphp/simplesamlphp-module-openidprovider",
     "description": "A SimpleSAMLphp module adding support for the OpenID protocol as an Identity Provider.",
     "type": "simplesamlphp-module",
     "keywords": [ "openid", "provider" ],
