@@ -1,5 +1,7 @@
 <?php
 
+// Modified by Xander Smeets on 09-03-2024
+
 if (isset($_SERVER['PATH_INFO'])) {
     $userId = substr($_SERVER['PATH_INFO'], 1);
 } else {
