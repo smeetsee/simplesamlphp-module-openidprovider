@@ -77,6 +77,13 @@ class ProviderServer
      */
     private static $instance = null;
 
+    /**
+     * The instance of the \Utils\HTTP class.
+     * 
+     * @var \Utils\HTTP
+     */
+    private $httpUtils;
+
 
     /**
      * Retrieve the OpenID provider class.
@@ -120,7 +127,7 @@ class ProviderServer
             }
         }
 
-        $httpUtils = new Utils\HTTP();
+        $this->httpUtils = new Utils\HTTP();
     }
 
 
@@ -321,7 +328,7 @@ class ProviderServer
     {
         $stateId = Auth\State::saveState($state, 'openidProvider:resumeState');
         $stateURL = Module::getModuleURL('openidProvider/' . $page);
-        return $httpUtils->addURLParameters($stateURL, ['StateID' => $stateId]);
+        return $this->httpUtils->addURLParameters($stateURL, ['StateID' => $stateId]);
     }
 
 
@@ -413,7 +420,7 @@ class ProviderServer
             }
 
             $trustURL = $this->getStateURL('trust.php', $state);
-            $httpUtils->redirectTrustedURL($trustURL);
+            $this->httpUtils->redirectTrustedURL($trustURL);
         }
 
         if (!$trusted) {
