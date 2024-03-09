@@ -10,7 +10,7 @@ $globalConfig = \SimpleSAML\Configuration::getInstance();
 $server = \SimpleSAML\Module\openidprovider\ProviderServer::getInstance();
 $identity = $server->getIdentity();
 
-$httpUtils = new \SimpleSAML\Utils\HTTP
+$httpUtils = new \SimpleSAML\Utils\HTTP;
 
 if (!$userId && $identity) {
     /*
