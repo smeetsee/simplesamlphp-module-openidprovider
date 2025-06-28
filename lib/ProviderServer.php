@@ -438,7 +438,7 @@ class ProviderServer
             }
         }
 
-        $pc = new Auth\ProcessingChain($this->authProc, [], 'idp');
+        $pc = new Auth\ProcessingChain(['authproc' => $this->authProc['authproc'], 'entityid' => 'openid_dummy_idp'], ['entityid' => 'openid_dummy_sp'], 'idp');
         $state = [
             'Attributes' => $attributes,
             'isPassive' => true
