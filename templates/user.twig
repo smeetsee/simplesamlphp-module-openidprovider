@@ -27,13 +27,8 @@
 
   <pre>
     <&zwj;link rel="openid.server" href="{{ serverURL|escape('html') }}" />
-  </pre>
-  <pre>
     <&zwj;link rel="openid2.provider" href="{{ serverURL|escape('html') }}" />
-  <pre>
     <&zwj;link rel="openid.delegate" href="{{ userIdURL|escape('html') }}" />
-  </pre>
-  <pre>
     <&zwj;link rel="openid2.local_id" href="{{ userIdURL|escape('html') }}" />
   </pre>
 </p>
@@ -48,7 +43,7 @@
 {% for hex, site in trustedSites %}
       <li>
         <input type="submit" name="{{ 'remove_' ~ hex }}" value="{{ 'Remove'|trans }}" />
-        <code>{{ site|escape('html') }}</code>
+        <pre>{{ site|escape('html') }}</pre>
       </li>
 {% endfor %}
     </ul>
