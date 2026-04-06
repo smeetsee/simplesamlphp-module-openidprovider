@@ -16,10 +16,13 @@ use SimpleSAML\Utils;
  * used is PHP4-compatible, and not PHP5 strict-standards compatible.
  */
 
-ProviderUtils::maskErrors(E_NOTICE | E_STRICT);
+ProviderUtils::maskErrors(E_NOTICE);
 if (defined('E_DEPRECATED')) {
     // PHP 5.3 also has E_DEPRECATED
     ProviderUtils::maskErrors(constant('E_DEPRECATED'));
+}
+if (defined('E_STRICT')) {
+    ProviderUtils::maskErrors(constant('E_STRICT'));
 }
 
 // Add the OpenID library search path.
