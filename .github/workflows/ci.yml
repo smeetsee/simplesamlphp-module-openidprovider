@@ -1,0 +1,204 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax-php:
+    name: Syntax check PHP (PHP ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.2', '7.3', '7.4']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Check PHP syntax
+        run: vendor/bin/check-syntax-php.sh
+
+  syntax-config:
+    name: Syntax check YAML / XML / JSON
+    runs-on: ubuntu-latest
+    needs: syntax-php
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Check YAML syntax
+        run: vendor/bin/check-syntax-yaml.sh
+
+      - name: Check XML syntax
+        run: vendor/bin/check-syntax-xml.sh
+
+      - name: Check JSON syntax
+        run: vendor/bin/check-syntax-json.sh
+
+  tests:
+    name: PHPUnit (PHP ${{ matrix.php-version }}, composer ${{ matrix.command }})
+    runs-on: ubuntu-latest
+    needs:
+      - syntax-php
+      - syntax-config
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.2', '7.3', '7.4']
+        command: ['install', 'update']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer ${{ matrix.command }} --no-interaction --no-progress --prefer-dist
+
+      - name: Run PHPUnit
+        run: php vendor/bin/phpunit --no-coverage
+
+  security-check-install:
+    name: Security check (composer install)
+    runs-on: ubuntu-latest
+    needs: tests
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Run security check
+        run: vendor/bin/security-checker security:check
+
+  security-check-update:
+    name: Security check (composer update)
+    runs-on: ubuntu-latest
+    needs: tests
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Run security check
+        run: vendor/bin/security-checker security:check
+
+  codecov:
+    name: Codecov
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: xdebug
+          tools: composer
+
+      - name: Install dependencies
+        run: |
+          composer update --no-interaction --no-progress --prefer-dist
+          php vendor/bin/phpunit
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: build/logs/clover.xml
+          fail_ci_if_error: true
+
+  psalm:
+    name: Psalm
+    runs-on: ubuntu-latest
+    needs: tests
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Run Psalm
+        run: |
+          vendor/bin/psalm
+          vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run
+
+  phpcs:
+    name: PHP Codesniffer
+    runs-on: ubuntu-latest
+    needs: tests
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.3'
+          coverage: none
+          tools: composer
+
+      - name: Install dependencies
+        run: composer update --no-interaction --no-progress --prefer-dist
+
+      - name: Run PHP_CodeSniffer
+        run: vendor/bin/phpcs
