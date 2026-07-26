@@ -34,7 +34,7 @@ msgid "Click here to log out of your OpenID user."
 msgstr "Klik hier om uit te loggen van uw OpenID gebruiker."
 
 msgid "Do you wish to log on to %SITEURL%?"
-msgstr "Wilt u in te loggen op %SITEURL%?"
+msgstr "Wilt u inloggen op %SITEURL%?"
 
 msgid "Remember this decision"
 msgstr "Onthoud deze keuze"
