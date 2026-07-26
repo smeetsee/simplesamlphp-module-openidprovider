@@ -9,7 +9,6 @@
         <directory name="hooks" />
         <directory name="lib" />
         <directory name="tests" />
-        <directory name="www" />
         <ignoreFiles>
             <directory name="vendor" />
         </ignoreFiles>
@@ -25,7 +24,6 @@
         <MissingReturnType errorLevel="info" />
         <MissingPropertyType errorLevel="info" />
         <InvalidDocblock errorLevel="info" />
-        <MisplacedRequiredParam errorLevel="info" />
 
         <PropertyNotSetInConstructor errorLevel="info" />
         <MissingConstructor errorLevel="info" />
@@ -40,5 +38,10 @@
                 <file name="tests/bootstrap.php" />
             </errorLevel>
         </UnresolvableInclude>
+        <UnusedVariable>
+            <errorLevel type="suppress">
+                <file name="config-templates/module-openidprovider.php" />
+            </errorLevel>
+        </UnusedVariable>
     </issueHandlers>
 </psalm>

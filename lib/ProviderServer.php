@@ -82,7 +82,7 @@ class ProviderServer
 
     /**
      * The instance of the \Utils\HTTP class.
-     * 
+     *
      * @var \Utils\HTTP
      */
     private $httpUtils;
