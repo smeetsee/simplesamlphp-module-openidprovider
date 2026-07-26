@@ -38,5 +38,10 @@
                 <file name="tests/bootstrap.php" />
             </errorLevel>
         </UnresolvableInclude>
+        <UnusedVariable>
+            <errorLevel type="suppress">
+                <file name="config-templates/module-openidprovider.php" />
+            </errorLevel>
+        </UnusedVariable>
     </issueHandlers>
 </psalm>
