@@ -34,39 +34,47 @@ jobs:
       - name: Check PHP syntax
         run: php -l **/*.php
 
-  syntax-config:
-    name: Syntax check YAML / XML / JSON
+  syntax-yaml:
+    name: Syntax check YAML
     runs-on: ubuntu-latest
-    needs: syntax-php
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.4'
-          coverage: none
-          tools: composer
-
-      - name: Install dependencies
-        run: composer update --no-interaction --no-progress --prefer-dist
+      - name: Install yamllint
+        run: pip install yamllint
 
       - name: Check YAML syntax
-        run: vendor/bin/check-syntax-yaml.sh
+        run: yamllint -d relaxed .
+
+  syntax-xml:
+    name: Syntax check XML
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Check XML syntax
-        run: vendor/bin/check-syntax-xml.sh
+        run: find . -name '*.xml' -not -path '*/vendor/*' | xargs xmllint --noout
 
-      - name: Check JSON syntax
-        run: vendor/bin/check-syntax-json.sh
+  syntax-json:
+    name: Syntax check JSON
+    runs-on: ubuntu-latest
+    steps:
+       - name: Checkout
+         uses: actions/checkout@v4
+
+       - name: Check JSON syntax
+         run: find . -name '*.json' -not -path '*/vendor/*' | xargs jq . > /dev/null
 
   tests:
     name: PHPUnit (PHP ${{ matrix.php-version }}, composer ${{ matrix.command }})
     runs-on: ubuntu-latest
     needs:
-      - syntax-php
-      - syntax-config
+       - syntax-php
+       - syntax-yaml
+       - syntax-xml
+       - syntax-json
     strategy:
       fail-fast: false
       matrix:
