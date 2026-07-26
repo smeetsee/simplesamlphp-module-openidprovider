@@ -30,7 +30,7 @@ jobs:
         run: composer install --no-interaction --no-progress --prefer-dist
 
       - name: Check PHP syntax
-        run: vendor/bin/check-syntax-php.sh
+        run: php -l **/*.php
 
   syntax-config:
     name: Syntax check YAML / XML / JSON
