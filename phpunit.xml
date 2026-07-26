@@ -6,11 +6,6 @@
             <directory>tests/</directory>
         </testsuite>
     </testsuites>
-    <filter>
-        <source>
-            <directory>./lib</directory>
-        </source>
-    </filter>
     <logging>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" />
         <log type="coverage-html" target="build/coverage" lowUpperBound="35" highLowerBound="70" />
