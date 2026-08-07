@@ -4,7 +4,7 @@ description: Runs Psalm static analysis on the codebase.
 
 runs:
   using: "docker"
-  image: "ghcr.io/danog/psalm:6.16.1"
+  image: "docker://ghcr.io/danog/psalm:6.16.1"
   args:
     - /composer/vendor/bin/psalm
     - --no-cache
