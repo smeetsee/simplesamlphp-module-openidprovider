@@ -40,7 +40,7 @@
         </UnresolvableInclude>
         <UnusedVariable>
             <errorLevel type="suppress">
-                <file name="config-templates/module-openidprovider.php" />
+                <file name="config-templates/module_openidProvider.php" />
             </errorLevel>
         </UnusedVariable>
     </issueHandlers>
